@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 import rogachev7.library_application.model.Book;
 
 @Repository
-public interface BooksRepository extends JpaRepository<Book, Integer> {
+public interface BookRepository extends JpaRepository<Book, Long> {
+    Book findByBookTitle(String title);
 }

@@ -4,45 +4,51 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
-@Table(name = "books")
+@Table(name = "book")
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "book_id")
+    @Column(name = "id")
     @Getter
     @Setter
-    private int bookID;
+    private Long bookID;
 
-    @Column(name = "book_title")
+    @Column(name = "title")
     @Getter
     @Setter
     private String bookTitle;
 
-    @Column(name = "book_author")
+    @Column(name = "author")
     @Getter
     @Setter
     private String bookAuthor;
 
-    @Column(name = "book_year")
+    @Column(name = "year")
     @Getter
     @Setter
     private int bookYear;
 
-    @Column(name = "book_genre")
+    @Column(name = "genre")
     @Getter
     @Setter
     private String bookGenre;
 
-    @Column(name = "book_in_stock")
+    @Column(name = "in_stock")
     @Getter
     @Setter
     private Boolean bookInStock;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    @Getter @Setter
-    private Set<Order> orders;
+    public Book() {
+    }
+
+    public Book(String bookTitle, String bookAuthor, int bookYear, String bookGenre, Boolean bookInStock) {
+        this.bookTitle = bookTitle;
+        this.bookAuthor = bookAuthor;
+        this.bookYear = bookYear;
+        this.bookGenre = bookGenre;
+        this.bookInStock = bookInStock;
+    }
 }

@@ -1,5 +1,6 @@
 package rogachev7.library_application.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@EqualsAndHashCode
 @Entity
 @Table(name = "renting")
 public class Renting {
@@ -23,12 +25,14 @@ public class Renting {
     @Setter
     private LocalDate date;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany (cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "renting_id")
     @Getter
     @Setter
     private List<Book> books;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "client_id")
     @Getter

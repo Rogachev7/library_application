@@ -1,11 +1,15 @@
 package rogachev7.library_application.model;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "client")
 public class Client {
@@ -15,41 +19,41 @@ public class Client {
     @Column(name = "id")
     @Getter
     @Setter
-    private Long clientID;
+    private Long id;
 
     @Column(name = "name")
     @Getter
     @Setter
-    private String clientName;
+    private String name;
 
     @Column(name = "address")
     @Getter
     @Setter
-    private String clientAddress;
+    private String address;
 
     @Column(name = "phone_number")
     @Getter
     @Setter
-    private String clientPhoneNumber;
+    private String phoneNumber;
 
     @OneToMany (fetch = FetchType.LAZY, mappedBy = "client", cascade = CascadeType.ALL)
     @Getter
-    private List<Renting> orders;
+    private List<Renting> rentingList;
 
 
     public Client() {
     }
 
-    public Client(String clientName, String clientAddress, String clientPhoneNumber) {
-        this.clientName = clientName;
-        this.clientAddress = clientAddress;
-        this.clientPhoneNumber = clientPhoneNumber;
+    public Client(String name, String address, String phoneNumber) {
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
     }
 
-    public void setOrders(List<Renting> orders) {
-        if (orders != null) {
-            orders.forEach(o -> o.setClient(this));
+    public void setRentingList(List<Renting> rentingList) {
+        if (rentingList != null) {
+            rentingList.forEach(o -> o.setClient(this));
         }
-        this.orders = orders;
+        this.rentingList = rentingList;
     }
 }

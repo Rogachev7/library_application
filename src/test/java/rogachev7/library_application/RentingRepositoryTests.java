@@ -3,13 +3,13 @@ package rogachev7.library_application;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.transaction.annotation.Transactional;
-import rogachev7.library_application.config.Config;
+import org.springframework.test.context.ActiveProfiles;
+import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.Book;
 import rogachev7.library_application.model.Client;
 import rogachev7.library_application.model.Renting;
+import rogachev7.library_application.repository.BookRepository;
+import rogachev7.library_application.repository.ClientRepository;
 import rogachev7.library_application.repository.RentingRepository;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-@TestPropertySource(locations = "classpath:test.properties")
+@ActiveProfiles("test")
 // Since I use @BeforeAll and @AfterAll in non-static methods,
 // it is necessary that the test class does not throw a JUnitException
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -28,47 +28,11 @@ public class RentingRepositoryTests {
     @Autowired
     private RentingRepository rentingRepository;
 
-    @Test
-    public void testAddRenting() {
-        int numberOfRentingBefore = rentingRepository.findAll().size();
-        rentingRepository.saveAndFlush(createRenting());
-        int numberOfRentingAfter = rentingRepository.findAll().size();
+    @Autowired
+    private ClientRepository clientRepository;
 
-        Assertions.assertEquals((numberOfRentingAfter - 1), numberOfRentingBefore);
-    }
-
-    @Test
-    public void testUpdateRenting() {
-        List<Renting> rentingList = rentingRepository.findAll();
-        Renting renting = rentingList.get(0);
-        LocalDate date = LocalDate.of(2020, 5, 14);
-        renting.setDate(date);
-        rentingRepository.save(renting);
-
-        Assertions.assertTrue(rentingRepository.existsRentingByDate(date));
-    }
-
-    @Test
-    @Transactional
-    public void testDeleteRenting() {
-
-        int numberOfRentingBefore = rentingRepository.findAll().size();
-        LocalDate date = LocalDate.of(2021, 1, 1);
-
-        if (rentingRepository.existsRentingByDate(date)) {
-            rentingRepository.deleteRentingByDate(date);
-        }
-
-        int numberOfRentingAfter = rentingRepository.findAll().size();
-        Assertions.assertEquals((numberOfRentingAfter + 1), numberOfRentingBefore);
-    }
-
-    private Renting createRenting() {
-        Client client = new Client("Алексеев Алексей Алексеевич", "Санкт-Петербург, ул. Алексеева д. 1", "+7 911 111 11 11");
-        Book book = new Book("Преступление и наказание", "Ф. М. Достоевский", 1866, "Роман", true);
-
-        return new Renting(client, LocalDate.now(), Collections.singletonList(book));
-    }
+    @Autowired
+    private BookRepository bookRepository;
 
     @BeforeAll
     private void createRentingList() {
@@ -86,6 +50,61 @@ public class RentingRepositoryTests {
         Renting renting1 = new Renting(client1, LocalDate.now(), client1RentalList);
         Renting renting2 = new Renting(client2, LocalDate.of(2021, 1, 1), client2RentalList);
         rentingRepository.saveAll(Arrays.asList(renting1, renting2));
+    }
+
+    private Renting createRenting() {
+        Client client = new Client("Алексеев Алексей Алексеевич", "Санкт-Петербург, ул. Алексеева д. 1", "+7 911 111 11 11");
+        Book book = new Book("Преступление и наказание", "Ф. М. Достоевский", 1866, "Роман", true);
+
+        return new Renting(client, LocalDate.now(), Collections.singletonList(book));
+    }
+
+    @Test
+    public void shouldCorreсtltySaveRenting() {
+        int numberOfRentingBefore = rentingRepository.findAll().size();
+        Renting renting = createRenting();
+        rentingRepository.saveAndFlush(renting);
+        int numberOfRentingAfter = rentingRepository.findAll().size();
+
+        Assertions.assertEquals((numberOfRentingAfter - 1), numberOfRentingBefore);
+        Assertions.assertEquals(renting, rentingRepository.findById(renting.getId()).orElseThrow(() -> new EntityNotFoundException("Renting not found")));
+    }
+
+    @Test
+    public void rentingDataShouldBeUpdatedСorrectly() {
+        List<Renting> rentingList = rentingRepository.findAll();
+        Renting editRenting = rentingList.get(0);
+
+        LocalDate date = LocalDate.of(2020, 5, 14);
+
+        editRenting.setClient(new Client("Александров Александр Александрович", "Москва", "8 800 555 35 35"));
+        editRenting.setDate(date);
+        editRenting.setBooks(Collections.singletonList(new Book("Мастер и Маргарита", "М. А. Булгаков", 1966, "Роман", true)));
+
+        rentingRepository.save(editRenting);
+
+        Assertions.assertEquals(editRenting, rentingRepository.findById(editRenting.getId()).orElseThrow(() -> new EntityNotFoundException("Renting not found")));
+    }
+
+    @Test
+    public void shouldCorreсtltyDeleteRenting() {
+        List<Renting> listRentingBefore = rentingRepository.findAll();
+        Renting deleteRenting = listRentingBefore.get(1);
+        Long notDeleteClientId = deleteRenting.getClient().getId();
+        Long deleteRentingId = deleteRenting.getId();
+        List<Book> listNotDeleteBook = bookRepository.findByRenting(deleteRenting);
+
+        if (rentingRepository.existsById(deleteRentingId)) {
+            rentingRepository.deleteById(deleteRentingId);
+        }
+
+        List<Renting> listRentingAfter = rentingRepository.findAll();
+        Assertions.assertNotEquals(listRentingBefore, listRentingAfter);
+        Assertions.assertFalse(rentingRepository.existsById(deleteRentingId));
+        Assertions.assertTrue(clientRepository.existsById(notDeleteClientId));
+        if (listNotDeleteBook != null) {
+            listNotDeleteBook.forEach(book -> Assertions.assertTrue(bookRepository.existsById(book.getId())));
+        }
     }
 
     @AfterAll

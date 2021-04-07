@@ -60,18 +60,20 @@ public class RentingRepositoryTests {
     }
 
     @Test
-    public void shouldCorreсtltySaveRenting() {
-        int numberOfRentingBefore = rentingRepository.findAll().size();
+    public void shouldCorrectlySaveRentingSaveBookSaveClient() {
         Renting renting = createRenting();
         rentingRepository.saveAndFlush(renting);
-        int numberOfRentingAfter = rentingRepository.findAll().size();
 
-        Assertions.assertEquals((numberOfRentingAfter - 1), numberOfRentingBefore);
+        Long shouldSaveBookId = renting.getBooks().get(0).getId();
+        Long shouldSaveClientId = renting.getClient().getId();
+
         Assertions.assertEquals(renting, rentingRepository.findById(renting.getId()).orElseThrow(() -> new EntityNotFoundException("Renting not found")));
+        Assertions.assertTrue(bookRepository.existsById(shouldSaveBookId));
+        Assertions.assertTrue(clientRepository.existsById(shouldSaveClientId));
     }
 
     @Test
-    public void rentingDataShouldBeUpdatedСorrectly() {
+    public void rentingDataShouldBeUpdatedCorrectly() {
         List<Renting> rentingList = rentingRepository.findAll();
         Renting editRenting = rentingList.get(0);
 
@@ -87,7 +89,7 @@ public class RentingRepositoryTests {
     }
 
     @Test
-    public void shouldCorreсtltyDeleteRenting() {
+    public void shouldCorrectlyDeleteRentingAndNotDeleteBook () {
         List<Renting> listRentingBefore = rentingRepository.findAll();
         Renting deleteRenting = listRentingBefore.get(1);
         Long notDeleteClientId = deleteRenting.getClient().getId();

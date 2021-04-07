@@ -1,7 +1,10 @@
 spring:
+  config:
+    activate:
+      on-profile: test
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
@@ -12,3 +15,22 @@ spring:
     platform: mysql
     username: root
     password: root
+
+---
+    spring:
+      config:
+        activate:
+          on-profile: prod
+      jpa:
+        hibernate:
+          ddl-auto: none
+        properties:
+          hibernate:
+            dialect: org.hibernate.dialect.MySQL8Dialect
+        database: MYSQL
+      datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/library_application
+        platform: mysql
+        username: root
+        password: root

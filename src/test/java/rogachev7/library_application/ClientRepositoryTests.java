@@ -6,11 +6,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import rogachev7.library_application.exception.EntityNotFoundException;
+import rogachev7.library_application.model.Book;
 import rogachev7.library_application.model.Client;
+import rogachev7.library_application.model.Renting;
 import rogachev7.library_application.repository.ClientRepository;
 import rogachev7.library_application.repository.RentingRepository;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,15 +32,20 @@ class ClientRepositoryTests {
     private RentingRepository rentingRepository;
 
     @BeforeAll
-    private void createClientData() {
+    private void createClientDataAndRentingData() {
         Client client1 = new Client("Иванов Иван Иванович", "Санкт-Петербург, ул. Иванова д. 1", "+7 999 999 99 99");
         Client client2 = new Client("Алексеев Алексей Алексеевич", "Санкт-Петербург, ул. Алексеева д. 1", "+7 911 111 11 11");
+
+        Client client = new Client("Николаев Николай Николаевич", "Санкт-Петербург, ул. Николаев д. 1", "+7 982 222 22 22");
+        Book book = new Book("Ревизор", "Н. В. Гоголь", 1836, "Комедия", true);
+
+        rentingRepository.saveAndFlush(new Renting(client, LocalDate.now(), Collections.singletonList(book)));
         clientRepository.saveAll(Arrays.asList(client1, client2));
     }
 
     @Test
     @Transactional
-    void shouldCorreсtltySaveClient() {
+    void shouldCorrectlySaveClient() {
         int numberOfClientBefore = clientRepository.findAll().size();
         Client client = new Client("Петров Пётр Петрович", "Санкт-Петербург, ул. Петрова д. 1", "+7 988 888 88 88");
         clientRepository.saveAndFlush(client);
@@ -48,7 +57,7 @@ class ClientRepositoryTests {
 
     @Test
     @Transactional
-    void clientDataShouldBeUpdatedСorrectly() {
+    void clientDataShouldBeUpdatedCorrectly() {
         Client editClient = clientRepository.findByName("Иванов Иван Иванович").orElseThrow(() -> new EntityNotFoundException("Client not found"));
 
         editClient.setName("Александров Александр Александрович");
@@ -61,8 +70,8 @@ class ClientRepositoryTests {
     }
 
     @Test
-    void shouldCorreсtltyDeleteClient() {
-        Client deleteClient = clientRepository.findByName("Алексеев Алексей Алексеевич").orElseThrow(() -> new EntityNotFoundException("Client not found"));
+    void shouldCorrectlyDeleteClientAndDeleteRenting() {
+        Client deleteClient = clientRepository.findByName("Николаев Николай Николаевич").orElseThrow(() -> new EntityNotFoundException("Client not found"));
         Long deleteRentingId = null;
         if (rentingRepository.findByClient(deleteClient).isPresent()) {
             deleteRentingId = rentingRepository.findByClient(deleteClient).get().getId();

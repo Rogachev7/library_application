@@ -10,6 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface RentingRepository extends JpaRepository<Renting, Long> {
-    boolean existsRentingByDate(LocalDate date);
     Optional<Renting> findByClient(Client client);
 }

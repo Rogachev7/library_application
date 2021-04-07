@@ -1,15 +1,12 @@
 package rogachev7.library_application.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
-@ToString
-@EqualsAndHashCode
+@Data
 @Entity
 @Table(name = "client")
 public class Client {
@@ -17,27 +14,19 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @Getter
-    @Setter
     private Long id;
 
     @Column(name = "name")
-    @Getter
-    @Setter
     private String name;
 
     @Column(name = "address")
-    @Getter
-    @Setter
     private String address;
 
     @Column(name = "phone_number")
-    @Getter
-    @Setter
     private String phoneNumber;
 
+    @ToString.Exclude
     @OneToMany (fetch = FetchType.LAZY, mappedBy = "client", cascade = CascadeType.ALL)
-    @Getter
     private List<Renting> rentingList;
 
 

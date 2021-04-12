@@ -1,14 +1,13 @@
 package rogachev7.library_application.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "renting")
 public class Renting {
@@ -22,18 +21,14 @@ public class Renting {
     private LocalDate date;
 
     @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @OneToMany (cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany (fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "renting_id")
     private List<Book> books;
 
     @EqualsAndHashCode.Exclude
-    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "client_id")
     private Client client;
-
-    public Renting() {
-    }
 
     public Renting(Client client, LocalDate date, List<Book> books) {
         this.client = client;

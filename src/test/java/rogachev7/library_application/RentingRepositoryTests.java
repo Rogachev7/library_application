@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.Book;
 import rogachev7.library_application.model.Client;
@@ -62,7 +63,7 @@ public class RentingRepositoryTests {
     @Test
     public void shouldCorrectlySaveRentingSaveBookSaveClient() {
         Renting renting = createRenting();
-        rentingRepository.saveAndFlush(renting);
+        rentingRepository.save(renting);
 
         Long shouldSaveBookId = renting.getBooks().get(0).getId();
         Long shouldSaveClientId = renting.getClient().getId();
@@ -76,6 +77,7 @@ public class RentingRepositoryTests {
     public void rentingDataShouldBeUpdatedCorrectly() {
         List<Renting> rentingList = rentingRepository.findAll();
         Renting editRenting = rentingList.get(0);
+        List<Book> booksThatShouldBecomeNull = bookRepository.findByRenting(editRenting);
 
         LocalDate date = LocalDate.of(2020, 5, 14);
 
@@ -84,8 +86,10 @@ public class RentingRepositoryTests {
         editRenting.setBooks(Collections.singletonList(new Book("Мастер и Маргарита", "М. А. Булгаков", 1966, "Роман", true)));
 
         rentingRepository.save(editRenting);
-
         Assertions.assertEquals(editRenting, rentingRepository.findById(editRenting.getId()).orElseThrow(() -> new EntityNotFoundException("Renting not found")));
+        for (Long id : booksThatShouldBecomeNull.stream().map(Book::getId).collect(Collectors.toSet())) {
+            Assertions.assertNull(bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book not found")).getRenting());
+        }
     }
 
     @Test

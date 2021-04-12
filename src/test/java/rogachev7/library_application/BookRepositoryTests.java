@@ -39,7 +39,7 @@ class BookRepositoryTests {
 		Client client = new Client("Николаев Николай Николаевич", "Санкт-Петербург, ул. Николаев д. 1", "+7 982 222 22 22");
 		Book book = new Book("Ревизор", "Н. В. Гоголь", 1836, "Комедия", true);
 
-		rentingRepository.saveAndFlush(new Renting(client, LocalDate.now(), Collections.singletonList(book)));
+		rentingRepository.save(new Renting(client, LocalDate.now(), Collections.singletonList(book)));
 		bookRepository.saveAll(Arrays.asList(book1, book2, book3));
 	}
 
@@ -47,7 +47,7 @@ class BookRepositoryTests {
 	void shouldCorrectlySaveBook() {
 		int numberOfBooksBefore = bookRepository.findAll().size();
 		Book book = new Book("Капитанская дочка", "А. С. Пушкин", 1836, "Роман", true);
-		bookRepository.saveAndFlush(book);
+		bookRepository.save(book);
 		int numberOfBooksAfter = bookRepository.findAll().size();
 
 		Assertions.assertEquals((numberOfBooksAfter - 1), numberOfBooksBefore);

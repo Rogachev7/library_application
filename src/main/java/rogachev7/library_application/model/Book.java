@@ -1,10 +1,13 @@
 package rogachev7.library_application.model;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "book")
 public class Book {
@@ -29,11 +32,9 @@ public class Book {
     @Column(name = "in_stock")
     private Boolean inStock;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "renting_id")
     private Renting renting;
-
-    public Book() {
-    }
 
     public Book(String title, String author, int year, String genre, Boolean inStock) {
         this.title = title;

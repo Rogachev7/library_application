@@ -1,4 +1,4 @@
-package rogachev7.library_application;
+package rogachev7.library_application.repositoryTest;
 
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

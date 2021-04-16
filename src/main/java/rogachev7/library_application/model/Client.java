@@ -12,6 +12,7 @@ import java.util.List;
 public class Client {
 
     @Id
+    @EqualsAndHashCode.Exclude
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
@@ -29,6 +30,11 @@ public class Client {
     @ToString.Exclude
     @OneToMany (fetch = FetchType.LAZY, mappedBy = "client", cascade = CascadeType.ALL)
     private List<Renting> rentingList;
+
+    public Client(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
 
     public Client(String name, String address, String phoneNumber) {
         this.name = name;

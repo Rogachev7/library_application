@@ -2,6 +2,7 @@ package rogachev7.library_application.model;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 public class Book {
 
     @Id
+    @EqualsAndHashCode.Exclude
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
@@ -24,7 +26,7 @@ public class Book {
     private String author;
 
     @Column(name = "year")
-    private int year;
+    private Integer year;
 
     @Column(name = "genre")
     private String genre;
@@ -36,7 +38,14 @@ public class Book {
     @JoinColumn(name = "renting_id")
     private Renting renting;
 
-    public Book(String title, String author, int year, String genre, Boolean inStock) {
+    public Book(String title, String author, Integer year, String genre) {
+        this.title = title;
+        this.author = author;
+        this.year = year;
+        this.genre = genre;
+    }
+
+    public Book(String title, String author, Integer year, String genre, Boolean inStock) {
         this.title = title;
         this.author = author;
         this.year = year;

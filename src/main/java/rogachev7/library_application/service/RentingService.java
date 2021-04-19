@@ -30,11 +30,6 @@ public class RentingService {
     }
 
     public Renting createRenting(Renting renting) {
-        if (renting.getClient() == null || renting.getDate() == null || renting.getBooks() == null) {
-            throw new BadRequestException("All fields must be filled");
-        }
-
-        parameterCheck(renting);
         return rentingRepository.save(renting);
     }
 
@@ -42,7 +37,6 @@ public class RentingService {
         if (!rentingRepository.existsById(id)) {
             throw new EntityNotFoundException("Renting not found");
         }
-        parameterCheck(renting);
         Renting editRenting = rentingRepository.getOne(id);
 
         if (renting.getClient() != null) {
@@ -68,21 +62,5 @@ public class RentingService {
 
     public boolean existsById(Long id) {
         return rentingRepository.existsById(id);
-    }
-
-    private void parameterCheck(Renting renting) {
-        if (renting.getDate().isAfter(LocalDate.now())) {
-            throw new BadRequestException("Incorrect renting date");
-        }
-        //The field «phoneNumber» must be unique
-        Client client = renting.getClient();
-        if (clientRepository.findByPhoneNumber(client.getPhoneNumber()).isPresent()) {
-            if (!client.equals(clientRepository.findByPhoneNumber(client.getPhoneNumber()).get())) {
-                throw new BadRequestException("Client with this phone number already exists");
-            }
-        }
-        if (renting.getBooks().size() == 0) {
-            throw new BadRequestException("Invalid book list renting");
-        }
     }
 }

@@ -32,8 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 /src/test/java/rogachev7/library_application/CleanData.java
-/src/main/java/rogachev7/library_application/service/interfaces/
-/src/main/java/rogachev7/library_application/service/BookServiceImpl.java
-/src/main/java/rogachev7/library_application/service/ClientServiceImpl.java
-/src/main/java/rogachev7/library_application/service/RentingServiceImpl.java
-/src/main/java/rogachev7/library_application/exception/BadRequestException.java
+/src/main/java/rogachev7/library_application/util/
+/src/main/java/rogachev7/library_application/controller/
+/src/main/resources/static/

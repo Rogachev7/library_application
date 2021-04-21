@@ -1,34 +1,19 @@
 package rogachev7.library_application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.Book;
 import rogachev7.library_application.repository.BookRepository;
 
-import java.util.List;
-
 @Service
-public class BookService {
-
-    @Autowired
-    private BookRepository bookRepository;
-
-    public List<Book> getAllBook() {
-        return bookRepository.findAll();
+public class BookService extends BaseCrudService<Book, BookRepository> {
+    protected BookService(BookRepository repository) {
+        super(repository);
     }
 
-    public Book getBook(Long id) { return bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book not found"));
-    }
-
-    public Book createBook(Book book) { return bookRepository.save(book);
-    }
-
-    public Book editBook(Long id, Book book) {
-        if (!bookRepository.existsById(id)) {
-            throw new EntityNotFoundException("Book not found");
-        }
-        Book editBook = bookRepository.getOne(id);
+    @Override
+    public Book edit(Book book) {
+        Book editBook = repository.findById(book.getId()).orElseThrow(() -> new EntityNotFoundException("Book not found"));
 
         if (book.getTitle() != null) {
             editBook.setTitle(book.getTitle());
@@ -46,18 +31,6 @@ public class BookService {
             editBook.setInStock(book.getInStock());
         }
 
-        return bookRepository.save(editBook);
+        return repository.save(editBook);
     }
-
-    public void deleteById(Long id) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.deleteById(id);
-        } else {
-            throw new EntityNotFoundException("Book not found");
-        }
-    }
-
-    public boolean existsById(Long id) {
-        return bookRepository.existsById(id);
-    }
-    }
+}

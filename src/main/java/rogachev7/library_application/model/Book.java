@@ -8,16 +8,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "book")
-public class Book {
-
-    @Id
-    @EqualsAndHashCode.Exclude
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class Book extends AbstractEntity {
 
     @Column(name = "title")
     private String title;

@@ -6,16 +6,11 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "client")
-public class Client {
-
-    @Id
-    @EqualsAndHashCode.Exclude
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+public class Client extends AbstractEntity {
 
     @Column(name = "name")
     private String name;

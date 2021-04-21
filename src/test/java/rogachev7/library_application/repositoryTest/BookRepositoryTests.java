@@ -10,6 +10,7 @@ import rogachev7.library_application.model.Client;
 import rogachev7.library_application.model.Renting;
 import rogachev7.library_application.repository.BookRepository;
 import rogachev7.library_application.repository.RentingRepository;
+import rogachev7.library_application.service.BookService;
 
 import java.time.LocalDate;
 import java.util.Arrays;

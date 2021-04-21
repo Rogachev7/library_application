@@ -1,6 +1,8 @@
 package rogachev7.library_application.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.core.EntityInformation;
+import org.springframework.data.repository.core.EntityMetadata;
 import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.AbstractEntity;
 import rogachev7.library_application.repository.CommonRepository;
@@ -33,7 +35,7 @@ public abstract class BaseCrudService <E extends AbstractEntity, R extends Commo
     }
 
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        repository.delete(repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("No entity with id %s exists!", id))));
     }
 
     public boolean existsById(Long id) {

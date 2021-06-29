@@ -5,12 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rogachev7.library_application.exception.EntityNotFoundException;
-import rogachev7.library_application.model.Book;
-import rogachev7.library_application.model.Client;
-import rogachev7.library_application.model.Renting;
+import rogachev7.library_application.model.entity.Book;
+import rogachev7.library_application.model.entity.Client;
+import rogachev7.library_application.model.entity.Renting;
 import rogachev7.library_application.repository.BookRepository;
 import rogachev7.library_application.repository.RentingRepository;
-import rogachev7.library_application.service.BookService;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -46,12 +45,9 @@ class BookRepositoryTests {
 
 	@Test
 	void shouldCorrectlySaveBook() {
-		int numberOfBooksBefore = bookRepository.findAll().size();
 		Book book = new Book("Капитанская дочка", "А. С. Пушкин", 1836, "Роман", true);
 		bookRepository.save(book);
-		int numberOfBooksAfter = bookRepository.findAll().size();
 
-		Assertions.assertEquals((numberOfBooksAfter - 1), numberOfBooksBefore);
 		Assertions.assertEquals(book, bookRepository.findByTitle("Капитанская дочка").orElseThrow(() -> new EntityNotFoundException("Book not found")));
 	}
 

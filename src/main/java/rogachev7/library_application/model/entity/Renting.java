@@ -1,5 +1,7 @@
-package rogachev7.library_application.model;
+package rogachev7.library_application.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,13 +23,19 @@ public class Renting extends AbstractEntity {
 
     @EqualsAndHashCode.Exclude
     @OneToMany (fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonManagedReference
     @JoinColumn(name = "renting_id")
     private List<Book> books;
 
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "client_id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Client client;
+
+    public Renting(LocalDate date) {
+        this.date = date;
+    }
 
     public Renting(Client client, LocalDate date, List<Book> books) {
         this.client = client;

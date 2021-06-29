@@ -1,4 +1,4 @@
-package rogachev7.library_application.model;
+package rogachev7.library_application.model.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,5 +15,5 @@ public abstract class AbstractEntity {
     @EqualsAndHashCode.Exclude
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    Long id;
 }

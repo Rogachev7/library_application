@@ -32,6 +32,3 @@ build/
 ### VS Code ###
 .vscode/
 /src/test/java/rogachev7/library_application/CleanData.java
-/src/main/java/rogachev7/library_application/util/
-/src/main/java/rogachev7/library_application/controller/
-/src/main/resources/static/

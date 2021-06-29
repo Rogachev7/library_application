@@ -1,5 +1,6 @@
-package rogachev7.library_application.model;
+package rogachev7.library_application.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,7 @@ public class Book extends AbstractEntity {
     private Boolean inStock;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     @JoinColumn(name = "renting_id")
     private Renting renting;
 

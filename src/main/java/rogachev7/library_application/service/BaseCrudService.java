@@ -1,45 +1,41 @@
 package rogachev7.library_application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.core.EntityInformation;
-import org.springframework.data.repository.core.EntityMetadata;
+import org.springframework.data.jpa.repository.JpaRepository;
 import rogachev7.library_application.exception.EntityNotFoundException;
-import rogachev7.library_application.model.AbstractEntity;
-import rogachev7.library_application.repository.CommonRepository;
+import rogachev7.library_application.model.entity.AbstractEntity;
 
 import java.util.List;
 
-public abstract class BaseCrudService <E extends AbstractEntity, R extends CommonRepository<E>> {
+public abstract class BaseCrudService <T extends AbstractEntity> {
 
-    protected final R repository;
+    abstract JpaRepository<T, Long> getRepository();
 
-    @Autowired
-    public BaseCrudService(R repository) {
-        this.repository = repository;
+    public List<T> getAll() {
+        return getRepository().findAll();
     }
 
-    public List<E> getAll() {
-        return repository.findAll();
+    public T getById(Long id) {
+        return getRepository().findById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
     }
 
-    public E getById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+    public T create(T entity) {
+        return getRepository().save(entity);
     }
 
-    public E create(E entity) {
-        return repository.save(entity);
+    public List<T> createAll(List<T> entities) {
+        return getRepository().saveAll(entities);
     }
 
-    public E edit(E entity) {
-        return repository.save(entity);
+    public T edit(T entity) {
+        return getRepository().save(entity);
     }
 
     public void deleteById(Long id) {
-        repository.delete(repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("No entity with id %s exists!", id))));
+        getRepository().delete(getRepository().findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("No entity with id %s exists!", id))));
     }
 
     public boolean existsById(Long id) {
-        return repository.existsById(id);
+        return getRepository().existsById(id);
     }
 
 }

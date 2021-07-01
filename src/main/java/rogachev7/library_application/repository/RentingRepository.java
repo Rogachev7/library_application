@@ -8,6 +8,6 @@ import rogachev7.library_application.model.entity.Renting;
 import java.util.Optional;
 
 @Repository
-public interface RentingRepository extends JpaRepository<Renting, Long> {
+public interface RentingRepository extends JpaRepository<Renting, Long>, CommonRepository<Renting> {
     Optional<Renting> findByClient(Client client);
 }

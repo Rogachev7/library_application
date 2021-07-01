@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "name", scope = Renting.class)
 @Entity
@@ -29,21 +28,9 @@ public class Client extends AbstractEntity {
     @OneToMany (fetch = FetchType.LAZY, mappedBy = "client", cascade = CascadeType.ALL)
     private List<Renting> rentingList;
 
-    public Client(String name, String address) {
-        this.name = name;
-        this.address = address;
-    }
-
     public Client(String name, String address, String phoneNumber) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-    }
-
-    public void setRentingList(List<Renting> rentingList) {
-        if (rentingList != null) {
-            rentingList.forEach(o -> o.setClient(this));
-        }
-        this.rentingList = rentingList;
     }
 }

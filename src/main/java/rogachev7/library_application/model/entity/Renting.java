@@ -11,8 +11,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "renting")
@@ -28,7 +28,7 @@ public class Renting extends AbstractEntity {
     private List<Book> books;
 
     @EqualsAndHashCode.Exclude
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "client_id")
     @JsonIdentityReference(alwaysAsId = true)
     private Client client;
@@ -37,16 +37,10 @@ public class Renting extends AbstractEntity {
         this.date = date;
     }
 
+    //Constructor for tests
     public Renting(Client client, LocalDate date, List<Book> books) {
         this.client = client;
         this.date = date;
-        if (books != null) {
-            books.forEach(o -> o.setRenting(this));
-        }
-        this.books = books;
-    }
-
-    public void setBooks(List<Book> books) {
         if (books != null) {
             books.forEach(o -> o.setRenting(this));
         }

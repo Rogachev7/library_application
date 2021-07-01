@@ -1,84 +1,42 @@
 package rogachev7.library_application.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.entity.Book;
 import rogachev7.library_application.model.entity.Renting;
-import rogachev7.library_application.repository.BookRepository;
 import rogachev7.library_application.repository.RentingRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class RentingService extends BaseCrudService <Renting> {
+public class RentingService extends AbstractService<Renting, RentingRepository> {
 
-    @Autowired
-    private RentingRepository repository;
-    @Autowired
-    private BookRepository bookRepository;
-
-    @Override
-    RentingRepository getRepository() {
-        return repository;
+    public RentingService(RentingRepository repository) {
+        super(repository);
     }
 
-    @Override
-    public Renting edit(Renting renting) {
-        Renting editRenting = getRepository().findById(renting.getId()).orElseThrow(() -> new EntityNotFoundException("Renting not found"));
-
-        if (renting.getClient() != null) {
-            editRenting.setClient(renting.getClient());
-        }
-        if (renting.getDate() != null) {
-            editRenting.setDate(renting.getDate());
-        }
-        if (renting.getBooks() != null) {
-            editRenting.setBooks(renting.getBooks());
-        }
-        return repository.save(editRenting);
-    }
-
-    @Override
-    public List<Renting> getAll() {
-        return getRepository().findAll();
-    }
-
-    @Override
-    public Renting getById(Long id) {
-        return getRepository().findById(id).orElseThrow(() -> new EntityNotFoundException("Renting not found"));
-    }
-
+    @Transactional
     @Override
     public Renting create(Renting entity) {
-        getRepository().save(entity);
+        if (entity.getDate() == null) {
+            entity.setDate(LocalDate.now());
+        }
+        repository.save(entity);
         List<Book> books = entity.getBooks();
-        books.forEach(book -> {
-            book.setInStock(false);
-            book.setRenting(entity);
-            bookRepository.save(book);
-        });
-        return getRepository().getOne(entity.getId());
+        books.forEach(book -> book.setInStock(false));
+        return repository.getOne(entity.getId());
     }
 
-    @Override
-    public List<Renting> createAll(List<Renting> entities) {
-        return getRepository().saveAll(entities);
-    }
-
+    @Transactional
     @Override
     public void deleteById(Long id) {
-        List<Book> books = getRepository().findById(id).orElseThrow(() -> new EntityNotFoundException("Renting not found")).getBooks();
+        List<Book> books = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("No renting with id %s exists!", id))).getBooks();
         books.forEach(book -> {
-                    book.setInStock(true);
-                    book.setRenting(null);
+            book.setInStock(true);
+            book.setRenting(null);
         });
-
-        getRepository().deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Long id) {
-        return getRepository().existsById(id);
+        repository.deleteById(id);
     }
 }

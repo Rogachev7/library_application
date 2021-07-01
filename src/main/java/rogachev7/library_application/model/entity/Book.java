@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "book")
@@ -30,7 +29,7 @@ public class Book extends AbstractEntity {
     @Column(name = "in_stock")
     private Boolean inStock;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     @JoinColumn(name = "renting_id")
     private Renting renting;
@@ -40,13 +39,5 @@ public class Book extends AbstractEntity {
         this.author = author;
         this.year = year;
         this.genre = genre;
-    }
-
-    public Book(String title, String author, Integer year, String genre, Boolean inStock) {
-        this.title = title;
-        this.author = author;
-        this.year = year;
-        this.genre = genre;
-        this.inStock = inStock;
     }
 }

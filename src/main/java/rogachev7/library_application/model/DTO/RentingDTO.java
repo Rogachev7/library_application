@@ -16,10 +16,4 @@ public class RentingDTO {
     public RentingDTO(LocalDate date) {
         this.date = date;
     }
-
-    public RentingDTO(LocalDate date, Long clientId, List<Long> booksId) {
-        this.date = date;
-        this.clientId = clientId;
-        this.booksId = booksId;
-    }
 }

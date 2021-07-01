@@ -7,7 +7,6 @@ import rogachev7.library_application.model.entity.Client;
 import java.util.Optional;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
+public interface ClientRepository extends JpaRepository<Client, Long>, CommonRepository<Client> {
     Optional<Client> findByName(String name);
-    Optional<Client> findByPhoneNumber(String phoneNumber);
 }

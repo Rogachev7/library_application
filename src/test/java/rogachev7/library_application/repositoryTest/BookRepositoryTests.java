@@ -32,12 +32,12 @@ class BookRepositoryTests {
 
 	@BeforeAll
 	private void createBookDataAndRentingData() {
-		Book book1 = new Book("Горе от ума", "А. С. Грибоедов", 1825, "Комедия", true);
-		Book book2 = new Book("Евгений Онегин", "А. С. Пушкин", 1825, "Роман в стихах", false);
-		Book book3 = new Book("Преступление и наказание", "Ф. М. Достоевский", 1866, "Роман", true);
+		Book book1 = new Book("Горе от ума", "А. С. Грибоедов", 1825, "Комедия");
+		Book book2 = new Book("Евгений Онегин", "А. С. Пушкин", 1825, "Роман в стихах");
+		Book book3 = new Book("Преступление и наказание", "Ф. М. Достоевский", 1866, "Роман");
 
 		Client client = new Client("Николаев Николай Николаевич", "Санкт-Петербург, ул. Николаев д. 1", "+7 982 222 22 22");
-		Book book = new Book("Ревизор", "Н. В. Гоголь", 1836, "Комедия", true);
+		Book book = new Book("Ревизор", "Н. В. Гоголь", 1836, "Комедия");
 
 		rentingRepository.save(new Renting(client, LocalDate.now(), Collections.singletonList(book)));
 		bookRepository.saveAll(Arrays.asList(book1, book2, book3));
@@ -45,7 +45,7 @@ class BookRepositoryTests {
 
 	@Test
 	void shouldCorrectlySaveBook() {
-		Book book = new Book("Капитанская дочка", "А. С. Пушкин", 1836, "Роман", true);
+		Book book = new Book("Капитанская дочка", "А. С. Пушкин", 1836, "Роман");
 		bookRepository.save(book);
 
 		Assertions.assertEquals(book, bookRepository.findByTitle("Капитанская дочка").orElseThrow(() -> new EntityNotFoundException("Book not found")));

@@ -36,7 +36,7 @@ class ClientRepositoryTests {
         Client client2 = new Client("Алексеев Алексей Алексеевич", "Санкт-Петербург, ул. Алексеева д. 1", "+7 911 111 11 11");
 
         Client client = new Client("Николаев Николай Николаевич", "Санкт-Петербург, ул. Николаев д. 1", "+7 982 222 22 22");
-        Book book = new Book("Ревизор", "Н. В. Гоголь", 1836, "Комедия", true);
+        Book book = new Book("Ревизор", "Н. В. Гоголь", 1836, "Комедия");
 
         rentingRepository.save(new Renting(client, LocalDate.now(), Collections.singletonList(book)));
         clientRepository.saveAll(Arrays.asList(client1, client2));

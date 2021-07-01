@@ -39,10 +39,10 @@ public class RentingRepositoryTests {
         Client client1 = new Client("Иванов Иван Иванович", "Санкт-Петербург, ул. Иванова д. 1", "+7 999 999 99 99");
         Client client2 = new Client("Петров Пётр Петрович", "Санкт-Петербург, ул. Петрова д. 1", "+7 988 888 88 88");
 
-        Book book1 = new Book("Анна Каренина", "Л. Н. Толстой", 1875, "Роман", true);
-        Book book2 = new Book("Капитанская дочка", "А. С. Пушкин", 1836, "Роман", true);
-        Book book3 = new Book("Горе от ума", "А. С. Грибоедов", 1825, "Комедия", true);
-        Book book4 = new Book("Евгений Онегин", "А. С. Пушкин", 1825, "Роман в стихах", true);
+        Book book1 = new Book("Анна Каренина", "Л. Н. Толстой", 1875, "Роман");
+        Book book2 = new Book("Капитанская дочка", "А. С. Пушкин", 1836, "Роман");
+        Book book3 = new Book("Горе от ума", "А. С. Грибоедов", 1825, "Комедия");
+        Book book4 = new Book("Евгений Онегин", "А. С. Пушкин", 1825, "Роман в стихах");
 
         List<Book> client1RentalList = Arrays.asList(book1, book2);
         List<Book> client2RentalList = Arrays.asList(book3, book4);
@@ -54,7 +54,7 @@ public class RentingRepositoryTests {
 
     private Renting createRenting() {
         Client client = new Client("Алексеев Алексей Алексеевич", "Санкт-Петербург, ул. Алексеева д. 1", "+7 911 111 11 11");
-        Book book = new Book("Преступление и наказание", "Ф. М. Достоевский", 1866, "Роман", true);
+        Book book = new Book("Преступление и наказание", "Ф. М. Достоевский", 1866, "Роман");
 
         return new Renting(client, LocalDate.now(), Collections.singletonList(book));
     }
@@ -82,7 +82,7 @@ public class RentingRepositoryTests {
 
         editRenting.setClient(new Client("Александров Александр Александрович", "Москва", "8 800 555 35 35"));
         editRenting.setDate(date);
-        editRenting.setBooks(Collections.singletonList(new Book("Мастер и Маргарита", "М. А. Булгаков", 1966, "Роман", true)));
+        editRenting.setBooks(Collections.singletonList(new Book("Мастер и Маргарита", "М. А. Булгаков", 1966, "Роман")));
 
         rentingRepository.save(editRenting);
         Assertions.assertEquals(editRenting, rentingRepository.findById(editRenting.getId()).orElseThrow(() -> new EntityNotFoundException("Renting not found")));

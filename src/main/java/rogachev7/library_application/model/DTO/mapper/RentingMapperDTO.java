@@ -38,7 +38,7 @@ public class RentingMapperDTO {
         Renting entity = new Renting(dto.getDate());
 
         Client client = clientRepository.getOne(dto.getClientId());
-        List<Book> books = dto.getBooksId().stream().map(id -> bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Book not found"))).collect(Collectors.toList());
+        List<Book> books = dto.getBooksId().stream().map(id -> bookRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String.format("No Book with id %s exists!", id)))).collect(Collectors.toList());
 
         entity.setClient(client);
         entity.setBooks(books);

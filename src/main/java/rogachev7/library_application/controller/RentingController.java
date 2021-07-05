@@ -7,6 +7,7 @@ import rogachev7.library_application.model.DTO.mapper.RentingMapperDTO;
 import rogachev7.library_application.model.entity.Renting;
 import rogachev7.library_application.service.RentingService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin

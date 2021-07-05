@@ -5,6 +5,7 @@ import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.entity.Book;
 import rogachev7.library_application.repository.BookRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,5 +24,12 @@ public class BookService extends AbstractService<Book, BookRepository> {
     public Book create(Book entity) {
         entity.setInStock(true);
         return super.create(entity);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        if (repository.getOne(id).getRenting() == null) {
+            super.deleteById(id);
+        }
     }
 }

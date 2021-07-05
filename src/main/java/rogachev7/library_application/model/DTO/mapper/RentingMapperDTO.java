@@ -26,7 +26,7 @@ public class RentingMapperDTO {
         RentingDTO dto = new RentingDTO(entity.getDate());
 
         Long clientId = entity.getClient().getId();
-        List<Long> booksId = entity.getBooks().stream().map(AbstractEntity::getId).collect(Collectors.toList());
+        List<Long> booksId = entity.getBooks().stream().map(Book::getId).collect(Collectors.toList());
 
         dto.setClientId(clientId);
         dto.setBooksId(booksId);

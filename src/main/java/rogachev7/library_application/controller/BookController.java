@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import rogachev7.library_application.model.entity.Book;
 import rogachev7.library_application.service.BookService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -31,12 +32,12 @@ public class BookController {
     }
 
     @PostMapping
-    public Book create (@RequestBody Book book) {
+    public Book create (@RequestBody @Valid Book book) {
         return bookService.create(book);
     }
 
     @PutMapping
-    public Book edit(@RequestBody Book book) {
+    public Book edit(@RequestBody @Valid Book book) {
         return bookService.edit(book);
     }
 

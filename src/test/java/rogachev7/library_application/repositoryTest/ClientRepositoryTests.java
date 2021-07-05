@@ -59,7 +59,7 @@ class ClientRepositoryTests {
 
         editClient.setName("Александров Александр Александрович");
         editClient.setAddress("Москва");
-        editClient.setPhoneNumber("8 800 555 35 35");
+        editClient.setPhoneNumber("+7 800 555 35 35");
 
         clientRepository.save(editClient);
 

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import rogachev7.library_application.model.entity.Client;
 import rogachev7.library_application.service.ClientService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -26,12 +27,12 @@ public class ClientController {
     }
 
     @PostMapping
-    public Client create (@RequestBody Client client) {
+    public Client create (@RequestBody @Valid Client client) {
         return clientService.create(client);
     }
 
     @PutMapping
-    public Client edit (@RequestBody Client client) {
+    public Client edit (@RequestBody @Valid Client client) {
         return clientService.edit(client);
     }
 

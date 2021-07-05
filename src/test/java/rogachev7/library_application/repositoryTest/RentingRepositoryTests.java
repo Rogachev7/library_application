@@ -80,7 +80,7 @@ public class RentingRepositoryTests {
 
         LocalDate date = LocalDate.of(2020, 5, 14);
 
-        editRenting.setClient(new Client("Александров Александр Александрович", "Москва", "8 800 555 35 35"));
+        editRenting.setClient(new Client("Александров Александр Александрович", "Москва", "+7 800 555 35 35"));
         editRenting.setDate(date);
         editRenting.setBooks(Collections.singletonList(new Book("Мастер и Маргарита", "М. А. Булгаков", 1966, "Роман")));
 
@@ -112,7 +112,7 @@ public class RentingRepositoryTests {
         }
     }
 
-    @AfterAll
+
     public void cleanTestDataRenting() {
         List<Long> rentingId = rentingRepository.findAll().stream().map(Renting::getId).collect(Collectors.toList());
         for (Long id : rentingId) {

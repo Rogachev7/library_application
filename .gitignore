@@ -32,3 +32,9 @@ build/
 ### VS Code ###
 .vscode/
 /src/test/java/rogachev7/library_application/CleanData.java
+/src/test/java/rogachev7/library_application/repositoryTest/
+/src/test/java/rogachev7/library_application/repositoryTest/
+/src/test/java/rogachev7/library_application/repositoryTest/
+/src/test/java/rogachev7/library_application/repositoryTest/BookRepositoryTests.java
+/src/test/java/rogachev7/library_application/repositoryTest/ClientRepositoryTests.java
+/src/test/java/rogachev7/library_application/repositoryTest/RentingRepositoryTests.java

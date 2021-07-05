@@ -11,6 +11,7 @@ import rogachev7.library_application.model.entity.Renting;
 import rogachev7.library_application.repository.BookRepository;
 import rogachev7.library_application.repository.RentingRepository;
 
+import java.beans.Transient;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,6 +45,7 @@ class BookRepositoryTests {
 	}
 
 	@Test
+	@Transient
 	void shouldCorrectlySaveBook() {
 		Book book = new Book("Капитанская дочка", "А. С. Пушкин", 1836, "Роман");
 		bookRepository.save(book);

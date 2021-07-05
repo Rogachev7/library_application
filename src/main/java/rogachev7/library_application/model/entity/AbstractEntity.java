@@ -1,13 +1,11 @@
 package rogachev7.library_application.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.persistence.*;
 
 @MappedSuperclass
-@Getter
-@Setter
+@Data
 public abstract class AbstractEntity {
 
     @Id

@@ -1,12 +1,11 @@
 package rogachev7.library_application.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,21 +14,25 @@ import javax.persistence.*;
 public class Book extends AbstractEntity {
 
     @Column(name = "title")
+    @Size(min = 1, max = 70)
     private String title;
 
     @Column(name = "author")
+    @Size(min = 2, max = 70)
     private String author;
 
     @Column(name = "year")
+    @Min(value = 1000)
     private Integer year;
 
     @Column(name = "genre")
+    @Size(min = 2, max = 20)
     private String genre;
 
     @Column(name = "in_stock")
     private Boolean inStock;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "renting_id")
     private Renting renting;

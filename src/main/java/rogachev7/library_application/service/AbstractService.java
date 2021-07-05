@@ -3,12 +3,9 @@ package rogachev7.library_application.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.entity.AbstractEntity;
-import rogachev7.library_application.model.entity.Book;
 import rogachev7.library_application.repository.CommonRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public abstract class AbstractService<E extends AbstractEntity, R extends CommonRepository<E>> implements CommonService<E> {
 

@@ -3,6 +3,8 @@ package rogachev7.library_application.model.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+import rogachev7.library_application.model.secury.Role;
+import rogachev7.library_application.model.secury.Status;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -28,6 +30,17 @@ public class Client extends AbstractEntity {
     @Size(min = 16, max = 16)
     private String phoneNumber;
 
+    @Column(name = "role")
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
+
+    @Column(name = "status")
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
+
+    @Column(name = "password")
+    private String password;
+
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @OneToMany (fetch = FetchType.LAZY, mappedBy = "client")
@@ -37,5 +50,14 @@ public class Client extends AbstractEntity {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
+    }
+
+    public Client(String name, String address, String phoneNumber, Role role, Status status, String password) {
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.status = status;
+        this.password = password;
     }
 }

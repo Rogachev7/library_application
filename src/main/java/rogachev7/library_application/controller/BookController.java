@@ -1,12 +1,17 @@
 package rogachev7.library_application.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rogachev7.library_application.model.entity.Book;
 import rogachev7.library_application.service.BookService;
+import rogachev7.library_application.specification.BookSpecification;
 
 import javax.validation.Valid;
+import java.awt.print.Pageable;
 import java.util.List;
 
 @CrossOrigin
@@ -19,8 +24,15 @@ public class BookController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('read')")
-    public List<Book> getAll() {
-        return bookService.getAll();
+    public List<Book> getAll(@RequestParam(required = false) String title,
+                             @RequestParam(required = false) String author,
+                             @RequestParam(required = false) String genre,
+                             @RequestParam(required = false) Integer minYear,
+                             @RequestParam(required = false) Integer maxYear,
+                             @RequestParam(required = false) Boolean inStock) {
+
+        Specification<Book> specification = BookSpecification.getSpecification(title, author, genre, minYear, maxYear, inStock);
+        return bookService.getAll(specification);
     }
 
     @GetMapping("/inStock")

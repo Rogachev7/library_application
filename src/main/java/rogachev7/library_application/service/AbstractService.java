@@ -1,6 +1,7 @@
 package rogachev7.library_application.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.entity.AbstractEntity;
 import rogachev7.library_application.repository.CommonRepository;
@@ -14,6 +15,11 @@ public abstract class AbstractService<E extends AbstractEntity, R extends Common
     @Autowired
     public AbstractService(R repository) {
         this.repository = repository;
+    }
+
+    @Override
+    public List<E> getAll(Specification<E> specification) {
+        return repository.findAll(specification);
     }
 
     @Override

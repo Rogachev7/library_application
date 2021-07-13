@@ -1,14 +1,15 @@
 package rogachev7.library_application.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rogachev7.library_application.model.DTO.RentingDTO;
 import rogachev7.library_application.model.DTO.mapper.RentingMapperDTO;
 import rogachev7.library_application.model.entity.Renting;
 import rogachev7.library_application.service.RentingService;
+import rogachev7.library_application.specification.RentingSpecification;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -23,8 +24,11 @@ public class RentingController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('read')")
-    public List<Renting> getAll() {
-        return rentingService.getAll();
+    public List<Renting> getAll(@RequestParam(required = false) Long after,
+                                @RequestParam(required = false) Long before) {
+
+        Specification<Renting> specification = RentingSpecification.getSpecification(after, before);
+        return rentingService.getAll(specification);
     }
 
     @GetMapping("{id}")

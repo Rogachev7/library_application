@@ -9,6 +9,7 @@ import rogachev7.library_application.model.entity.Book;
 import rogachev7.library_application.model.entity.Client;
 import rogachev7.library_application.model.entity.Renting;
 import rogachev7.library_application.repository.BookRepository;
+import rogachev7.library_application.repository.ClientRepository;
 import rogachev7.library_application.repository.RentingRepository;
 
 import java.beans.Transient;
@@ -29,6 +30,9 @@ class BookRepositoryTests {
 	private BookRepository bookRepository;
 
 	@Autowired
+	private ClientRepository clientRepository;
+
+	@Autowired
 	private RentingRepository rentingRepository;
 
 	@BeforeAll
@@ -40,8 +44,9 @@ class BookRepositoryTests {
 		Client client = new Client("Николаев Николай Николаевич", "Санкт-Петербург, ул. Николаев д. 1", "+7 982 222 22 22");
 		Book book = new Book("Ревизор", "Н. В. Гоголь", 1836, "Комедия");
 
+		clientRepository.save(client);
+		bookRepository.saveAll(Arrays.asList(book, book1, book2, book3));
 		rentingRepository.save(new Renting(client, LocalDate.now(), Collections.singletonList(book)));
-		bookRepository.saveAll(Arrays.asList(book1, book2, book3));
 	}
 
 	@Test
@@ -68,7 +73,7 @@ class BookRepositoryTests {
 	}
 
 	@Test
-	void shouldCorrectlyDeleteBookAndDeleteRenting() {
+	void shouldCorrectlyDeleteBookAndNotDeleteRenting() {
 		Book deleteBook = bookRepository.findByTitle("Ревизор").orElseThrow(() -> new EntityNotFoundException("Book not found"));
 
 		Long deleteRentingId = null;
@@ -79,7 +84,7 @@ class BookRepositoryTests {
 
 		Assertions.assertFalse(bookRepository.existsById(deleteBook.getId()));
 		if (deleteRentingId != null) {
-			Assertions.assertFalse(rentingRepository.existsById(deleteRentingId));
+			Assertions.assertTrue(rentingRepository.existsById(deleteRentingId));
 		}
 	}
 

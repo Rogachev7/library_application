@@ -10,7 +10,7 @@ ____
 - Spring Boot, Spring Security, Spring MVC;
 - База данных MySQL;
 - Hibernate для работы с БД;
-- JUnit для тестирования функциональности.
+- Spring Boot Test для тестирования функциональности.
 ____
 
 Функциональность:

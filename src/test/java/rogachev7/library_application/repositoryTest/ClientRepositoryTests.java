@@ -8,9 +8,11 @@ import rogachev7.library_application.exception.EntityNotFoundException;
 import rogachev7.library_application.model.entity.Book;
 import rogachev7.library_application.model.entity.Client;
 import rogachev7.library_application.model.entity.Renting;
+import rogachev7.library_application.repository.BookRepository;
 import rogachev7.library_application.repository.ClientRepository;
 import rogachev7.library_application.repository.RentingRepository;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,6 +25,9 @@ import java.util.stream.Collectors;
 // it is necessary that the test class does not throw a JUnitException
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ClientRepositoryTests {
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -38,8 +43,9 @@ class ClientRepositoryTests {
         Client client = new Client("Николаев Николай Николаевич", "Санкт-Петербург, ул. Николаев д. 1", "+7 982 222 22 22");
         Book book = new Book("Ревизор", "Н. В. Гоголь", 1836, "Комедия");
 
+        bookRepository.save(book);
+        clientRepository.saveAll(Arrays.asList(client, client1, client2));
         rentingRepository.save(new Renting(client, LocalDate.now(), Collections.singletonList(book)));
-        clientRepository.saveAll(Arrays.asList(client1, client2));
     }
 
     @Test
@@ -67,17 +73,21 @@ class ClientRepositoryTests {
     }
 
     @Test
-    void shouldCorrectlyDeleteClientAndDeleteRenting() {
+    void shouldNotDeleteClientIfRentingExists () {
         Client deleteClient = clientRepository.findByName("Николаев Николай Николаевич").orElseThrow(() -> new EntityNotFoundException("Client not found"));
         Long deleteRentingId = null;
         if (rentingRepository.findByClient(deleteClient).isPresent()) {
             deleteRentingId = rentingRepository.findByClient(deleteClient).get().getId();
         }
-        clientRepository.delete(deleteClient);
 
-        Assertions.assertFalse(clientRepository.existsById(deleteClient.getId()));
-        if (deleteRentingId != null) {
-            Assertions.assertFalse(rentingRepository.existsById(deleteRentingId));
+        try {
+            clientRepository.delete(deleteClient);
+        } catch (Exception ignored) {
+        } finally {
+            Assertions.assertTrue(clientRepository.existsById(deleteClient.getId()));
+            if (deleteRentingId != null) {
+                Assertions.assertTrue(rentingRepository.existsById(deleteRentingId));
+            }
         }
     }
 

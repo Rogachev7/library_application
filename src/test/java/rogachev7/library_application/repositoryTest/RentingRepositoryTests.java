@@ -47,6 +47,9 @@ public class RentingRepositoryTests {
         List<Book> client1RentalList = Arrays.asList(book1, book2);
         List<Book> client2RentalList = Arrays.asList(book3, book4);
 
+        bookRepository.saveAll(Arrays.asList(book1, book2, book3, book4));
+        clientRepository.saveAll(Arrays.asList(client1, client2));
+
         Renting renting1 = new Renting(client1, LocalDate.now(), client1RentalList);
         Renting renting2 = new Renting(client2, LocalDate.of(2021, 1, 1), client2RentalList);
         rentingRepository.saveAll(Arrays.asList(renting1, renting2));
@@ -62,6 +65,8 @@ public class RentingRepositoryTests {
     @Test
     public void shouldCorrectlySaveRentingSaveBookSaveClient() {
         Renting renting = createRenting();
+        bookRepository.saveAll(rentingRepository.getOne(renting.getId()).getBooks());
+        clientRepository.save(rentingRepository.getOne(renting.getId()).getClient());
         rentingRepository.save(renting);
 
         Long shouldSaveBookId = renting.getBooks().get(0).getId();
